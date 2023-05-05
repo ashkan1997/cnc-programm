@@ -14,7 +14,7 @@
 //  |____/ \___|\___|_|\__,_|_|  \__,_|\__|_|\___/|_| |_|___/
 
 // Trapezoidal velocity profile
-typedef struct { 
+typedef struct {
   data_t a, d;             // acceleration
   data_t f, l;             // nominal feedrate and length
   data_t fs, fe;           // initial and final feedrate
@@ -310,10 +310,9 @@ static void block_compute(block_t *b) {
   assert(b);
   data_t A, a, d;
   data_t dt, dt_1, dt_2, dt_m, dq;
-  data_t f_s, f_m, l;
+  data_t f_m, l;
 
   A = b->acc;
-
   f_m = b->act_feedrate / 60.0;
   l = b->length;
   dt_1 = f_m / A;
