@@ -13,8 +13,8 @@ The finite state machine has:
 Functions and types have been generated with prefix "ccnc_"
 ******************************************************************************/
 
-#include "fsm.h"
-#include "block.h"
+#include "fsm_la.h"
+#include "block_la.h"
 #include "point.h"
 #include <unistd.h>
 #include <termios.h>
@@ -100,11 +100,16 @@ ccnc_state_t ccnc_do_init(ccnc_state_data_t *data) {
     next_state = CCNC_STATE_STOP;
     goto next_state;
   }
-  if (program_parse(data->prog, data->machine) == EXIT_FAILURE) {
+  if (program_parse_partial(data->prog, data->machine) == EXIT_FAILURE) {
     next_state = CCNC_STATE_STOP;
     goto next_state;
   }
   // if available, calculate here the look-ahead
+
+  if (program_parse(data->prog) == EXIT_FAILURE){
+    next_state = CCNC_STATE_STOP;
+    goto next_state;
+  }
 
   // * print G-code file
   eprintf("Parsed the program %s\n", data->prog_file);

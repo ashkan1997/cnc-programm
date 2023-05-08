@@ -1,9 +1,9 @@
 #include "../defines.h"
 #include "../machine.h"
-#include "../program.h"
-#include "../block.h"
+#include "../program_la.h"
+#include "../block_la.h"
 #include "../point.h"
-#include "../fsm.h"
+#include "../fsm_la.h"
 
 #define eprintf(...) fprintf(stderr, __VA_ARGS__)
 

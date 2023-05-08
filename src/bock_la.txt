@@ -1,10 +1,11 @@
-//   ____  _            _
+//   ____  _            _    
 //  | __ )| | ___   ___| | __
 //  |  _ \| |/ _ \ / __| |/ /
-//  | |_) | | (_) | (__|   <
+//  | |_) | | (_) | (__|   < 
 //  |____/|_|\___/ \___|_|\_\
 
-#include "block.h"
+// #include "block.h"
+#include "block_la.h"
 #include <ctype.h>
 
 //   ____            _                 _   _
@@ -50,6 +51,7 @@ static point_t *point_zero(block_t *b);
 static void block_compute(block_t *b);
 static int block_arc(block_t *b);
 static data_t quantize(data_t t, data_t tq, data_t *dq);
+static data_t block_alpha(block_t *b);
 
 //   _____                 _   _
 //  |  ___|   _ _ __   ___| |_(_) ___  _ __  ___
@@ -135,7 +137,7 @@ void block_print(block_t *b, FILE *out) {
 // ALGORITHMS ==================================================================
 
 // Parsing the G-code string. Returns an integer for success/failure
-int block_parse(block_t *b) {
+int block_parse_partial(block_t *b) {
   assert(b);
   char *word, *line, *tofree;
   point_t *p0;
@@ -166,7 +168,6 @@ int block_parse(block_t *b) {
     // calculate feed profile
     b->acc = machine_A(b->machine);
     b->act_feedrate = b->feedrate;
-    block_compute(b);
     break;
   case ARC_CW:
   case ARC_CCW:
@@ -197,7 +198,6 @@ int block_parse(block_t *b) {
       rv++;
     }
     // calculate feed profile
-    block_compute(b);
     break;
   default:
     break;
@@ -205,6 +205,14 @@ int block_parse(block_t *b) {
   // return number of parsing errors
   return rv;
 }
+
+
+int block_parse(block_t *b) {
+  assert(b);
+  block_compute(b);
+  return 0;
+}
+
 
 
 // Evaluate the value of lambda at a certaint time
@@ -305,34 +313,112 @@ static data_t quantize(data_t t, data_t tq, data_t *dq) {
   return q;
 }
 
+static data_t block_alpha(block_t *b){
+  data_t cos_alpha;
+  data_t ax, bx, ay , by ,az,bz, dot_prod;
+  
+  // if (!b->prev){
+  //   ax = point_x(b->target); 
+  //   ay = point_y(b->target);
+  //   bx = point_x(b->next->target) - point_x(b->target);
+  //   by = point_y(b->next->target) - point_y(b->target);
+  // }else{
+  //   ax = point_x(b->target) - point_x(b->prev->target); 
+  //   ay = point_y(b->target) - point_x(b->prev->target);
+  //   bx = point_x(b->next->target) - point_x(b->target);
+  //   by = point_y(b->next->target) - point_y(b->target);
+// }
+  ax = point_x(b->delta);
+  az = point_z(b->delta);
+  ay = point_y(b->delta);
+  bx = point_x(b->next->delta);
+  by = point_y(b->next->delta);
+  bz = point_z(b->next->delta);
+  
+  dot_prod = (ax*bx) + (ay*by) + (az*bz);
+  cos_alpha = (dot_prod)/(b->length * b->next->length);
+  return cos_alpha;
+}
 // Calcultare the velocity profile
 static void block_compute(block_t *b) {
   assert(b);
   data_t A, a, d;
   data_t dt, dt_1, dt_2, dt_m, dq;
-  data_t f_m, l;
+  data_t f_s,f_m, f_e , l;
+  data_t alpha;
+  data_t l1, l2 ,lm;
 
   A = b->acc;
-  f_m = b->act_feedrate / 60.0;
   l = b->length;
-  dt_1 = f_m / A;
-  dt_2 = dt_1;
-  dt_m = l /f_m - (dt_1 + dt_2) / 2.0;
-  if (dt_m > 0) { // trapezoidal profile
-    dt = quantize(dt_1 + dt_m + dt_2, machine_tq(b->machine), &dq);
-    dt_m += dq; 
-    f_m = (2 * l) / (dt_1 + dt_2 + 2 * dt_m);
+
+  if(!(b->prev)) {
+    f_s = 0.0;
+  }else{
+    f_s = b->prev->prof->fe;
   }
-  else { // triangular profile (short block)
-    dt_1 = sqrt(l / A);
+
+  f_m = b->act_feedrate / 60.0;
+  
+  
+  if(!(b->next)){
+    alpha = 0;
+    f_e = 0;
+  }else{
+    alpha = block_alpha(b);
+    f_e = (f_m + b->next->act_feedrate/60)/2 * alpha;
+  }
+
+  if (alpha <= 0.5){
+    
+    dt_1 = f_m / A;
     dt_2 = dt_1;
-    dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
-    dt_m = 0;
-    dt_2 += dq;
-    f_m = 2 * l / (dt_1 + dt_2);
+    dt_m = l /f_m - (dt_1 + dt_2) / 2.0;
+    if (dt_m > 0) { // trapezoidal profile
+      dt = quantize(dt_1 + dt_m + dt_2, machine_tq(b->machine), &dq);
+      dt_m += dq; 
+      f_m = (2 * l) / (dt_1 + dt_2 + 2 * dt_m);
+    }
+    else { // triangular profile (short block)
+      dt_1 = sqrt(l / A);
+      dt_2 = dt_1;
+      dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
+      dt_m = 0;
+      dt_2 += dq;
+      f_m = 2 * l / (dt_1 + dt_2);
+    }
+    f_e = 0;
+
+  }else{
+
+    dt_1 = fabs(f_m - f_s) / A;
+    l1 = 0.5 * A * pow(dt_1,2) + f_s * dt_1;
+    dt_2 = fabs(f_e - f_m) / A;
+    l2 = 0.5 * A * pow(dt_2,2) + f_m * dt_2;
+    lm = l - (l1 + l2);
+    dt_m = lm /f_m - (dt_1 + dt_2) / 2.0;
+    if (dt_m > 0) { // trapezoidal profile
+      dt = quantize(dt_1 + dt_m + dt_2, machine_tq(b->machine), &dq);
+      dt_m += dq; 
+      f_m = ((2 * l) - (f_s * dt_1) - (f_e * dt_2)) / (dt_1 + dt_2 + 2 * dt_m);
+      a = (f_m - f_s)/dt_1;
+      d = (f_e - f_m) / dt_2;
+    }
+    else { // triangular profile (short block)
+      dt_1 = sqrt(l / A) * sqrt(2/alpha);
+      dt_2 = (1-alpha) * dt_1;
+      dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
+      dt_m = 0;
+      lm = 0;
+      dt_2 += dq;
+      f_m = 2 * l / (dt_1 + dt_2);
+      
+    }
   }
-  a = f_m / dt_1;
-  d = -(f_m / dt_2);
+  a = (f_m - f_s) / dt_1;
+  d = (f_e - f_m / dt_2);
+
+  if (a < 0 || dt_1 == 0) a=0;
+  if (d > 0 || dt_2 == 0) d=0;
   // set calculated values in block object
   b->prof->dt_1 = dt_1;
   b->prof->dt_2 = dt_2;
@@ -342,6 +428,8 @@ static void block_compute(block_t *b) {
   b->prof->f = f_m;
   b->prof->dt = dt;
   b->prof->l = l;
+  b->prof->fe = f_e;
+  b->prof->fs = f_s;
 }
 
 // Calculate the arc coordinates
@@ -489,3 +577,80 @@ int main() {
   return 0;
 }
 #endif
+//   _                _               _                    _ 
+//  | |    ___   ___ | | __      __ _| |__   ___  __ _  __| |
+//  | |   / _ \ / _ \| |/ /____ / _` | '_ \ / _ \/ _` |/ _` |
+//  | |__| (_) | (_) |   <_____| (_| | | | |  __/ (_| | (_| |
+//  |_____\___/ \___/|_|\_\     \__,_|_| |_|\___|\__,_|\__,_|
+//
+// Implement here block-related functions for look-ahead
+
+
+// int block_parse_partial(block_t *b) {
+//   assert(b);
+//   char *word, *line, *tofree;
+//   point_t *p0;
+//   int rv = 0;
+
+//   tofree = line = strdup(b->line);
+//   if (!line) {
+//     perror("Could not allocate momory for tokenizing line");
+//     return 1;
+//   }
+//   // Tokenizing loop
+//   while ((word = strsep(&line, " ")) != NULL) {
+//     // word[0] is the command
+//     // word+1 is the pointer to the argument as a string
+//     rv += block_set_fields(b, toupper(word[0]), word + 1);
+//   }
+//   free(tofree);
+
+//   // inherit modal fields from the previous block
+//   p0 = point_zero(b);
+//   point_modal(p0, b->target);
+//   point_delta(p0, b->target, b->delta);
+//   b->length = point_dist(p0, b->target);
+  
+//   // deal with motion blocks
+//   switch (b->type) {
+//   case LINE:
+//     // calculate feed profile
+//     b->acc = machine_A(b->machine);
+//     b->act_feedrate = b->feedrate;
+//     break;
+//   case ARC_CW:
+//   case ARC_CCW:
+//     // calculate arc coordinates
+//     if (block_arc(b)) {
+//       rv++;
+//       break;
+//     }
+//     // set corrected feedrate and acceleration
+//     // centripetal acc = f^2/r, must be <= A
+//     // INI file gives A in mm/s^2, feedrate is given in mm/min
+//     // We divide by two because, in the critical condition where we have 
+//     // the maximum feedrate, in the following equation for calculating the 
+//     // acceleration, it goes to 0. In fact, if we accept the centripetal 
+//     // acceleration to reach the maximum acceleration, then the tangential 
+//     // acceleration would go to 0.
+//     // A more elegant solution would be to calculate a minimum time soltion 
+//     // for the whole arc, but it is outside the scope.
+//     b->act_feedrate =
+//         MIN(b->feedrate, sqrt(machine_A(b->machine)/2.0 * b->r) * 60);
+//     // tangential acceleration: when composed with centripetal one, total
+//     // acceleration must be <= A
+//     // a^2 <= A^2 + v^4/r^2
+//     b->acc = sqrt(pow(machine_A(b->machine), 2) - pow(b->act_feedrate / 60, 4) / pow(b->r, 2));
+//     // deal with complex result
+//     if (isnan(b->acc)) {
+//       eprintf("Cannot compute arc: insufficient acceleration");
+//       rv++;
+//     }
+//     // calculate feed profile
+//     break;
+//   default:
+//     break;
+//   }
+//   // return number of parsing errors
+//   return rv;
+// }
