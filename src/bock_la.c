@@ -374,66 +374,96 @@ static void block_compute(block_t *b) {
 
   // f_e , f_s and f_m is calculated
 
-  if (alpha <= 0.5){
-    f_e = 0;
-    dt_1 = (f_m - f_s) / A;
-    dt_2 = fabs(f_e - f_m) / A;
-    dt_m = l /f_m - (dt_1 + dt_2) / 2.0;
-    if (dt_m > 0) { // trapezoidal profile
-      dt = quantize(dt_1 + dt_m + dt_2, machine_tq(b->machine), &dq);
-      dt_m += dq; 
-      f_m = (2 * l) / (dt_1 + dt_2 + 2 * dt_m);
+  // if (alpha <= 0.5){
+  //   f_e = 0;
+  //   dt_1 = (f_m - f_s) / A;
+  //   dt_2 = fabs(f_e - f_m) / A;
+  //   dt_m = l /f_m - (dt_1 + dt_2) / 2.0;
+  //   if (dt_m > 0) { // trapezoidal profile
+  //     dt = quantize(dt_1 + dt_m + dt_2, machine_tq(b->machine), &dq);
+  //     dt_m += dq; 
+  //     f_m = (2 * l) / (dt_1 + dt_2 + 2 * dt_m);
+  //   }
+  //   else { // triangular profile (short block)
+  //     dt_1 = sqrt(l / A);
+  //     dt_2 = dt_1;
+  //     dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
+  //     dt_m = 0;
+  //     dt_2 += dq;
+  //     f_m = 2 * l / (dt_1 + dt_2);
+  //   }
+  //   a = (f_m - f_s) / dt_1;
+  //   d = (f_e - f_m) / dt_2;
+
+  // }else{    //LOOK-AHEAD
+
+  // double L1 = (pow(f_m, 2) - pow(f_s, 2)) / (2 * A);
+  dt_1 = (f_m - f_s) / A;
+  dt_2 = (f_m - f_e) / A;
+  dt_m = (l/f_m) - (fabs(dt_1) * (f_m + f_s)/(2*f_m)) - (fabs(dt_2) * (f_e + f_m)/(2*f_m));
+  
+  if (dt_m > 0 {
+    dt = quantize(fabs(dt_1) + dt_m + fabs(dt_2), machine_tq(b->machine), &dq);
+    dt_m += dq;
+    f_m = ((2 * l) - (f_s * fabs(dt_1)) - (f_e * fabs(dt_2))) / fabs(dt_1 + dt_2 + 2 * dt_m);
+
+    // calculate acceleration --> dt_1 > 0 , dt_2 < 0
+    if (dt_1 > 0){     // a > 0 ,  f_m > f_s
+      a = (f_m - f_s) / dt_1;  
     }
-    else { // triangular profile (short block)
-      dt_1 = sqrt(l / A);
-      dt_2 = dt_1;
-      dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
+
+    if( dt_2 < 0){    // d > 0     f_e > f_m
+      d = (f_m - f_e) / dt_2; 
+    }
+
+    // calculate deceleration --> dt_1 < 0 , dt_2 > 0
+    if (dt_1 < 0){   // a < 0    ,   f_m < f_s
+      a = (f_s - f_m) / dt_1;
+    }
+    if (dt_2 > 0){   // d < 0   ,   f_e < f_m
+      d = (f_e - f_m) / dt_2;
+    }
+
+  }else{   // short segmentation
+    dt_1 = sqrt(L/A);
+    dt_2 = dt_1;
+    dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
       dt_m = 0;
       dt_2 += dq;
       f_m = 2 * l / (dt_1 + dt_2);
-    }
-    a = (f_m - f_s) / dt_1;
-    d = (f_e - f_m) / dt_2;
 
-  }else{    //LOOK-AHEAD
+      a = (f_m - f_s)/dt_1;
+      d = (f_e - f_m)/dt_2;
 
-    dt_1 = (f_m - f_s) / A;
-    l1 = 0.5 * A * pow(dt_1,2) + f_s * dt_1;
-    dt_2 = fabs(f_e - f_m) / A;
-    l2 = 0.5 * A * pow(dt_2,2) + f_m * dt_2;
-    if (dt_1 ==0) l1 = 0;
-    if (dt_2 ==0) l2 = 0;
-    lm = l - (l1 + l2);
-    // dt_m = lm /f_m - (dt_1 + dt_2) / 2.0;
-    dt_m = lm /f_m;
-    if (dt_m > 0) { // trapezoidal profile LOOK-AHEAD
-      dt = quantize(dt_1 + dt_m + dt_2, machine_tq(b->machine), &dq);
-      dt_m += dq; 
-      f_m = ((2 * l) - (f_s * dt_1) - (f_e * dt_2)) / (dt_1 + dt_2 + 2 * dt_m);
-      // if (dt_1 ==0){ a = 0;}
-      dt_1 += dq;
-      else{a = (f_m - f_s)/dt_1;}
-      dt_2 += dq;
-      // if (dt_2 ==0){ d = 0;}
-      else{d = (f_e - f_m)/dt_2;}
-    }
-    else { // triangular profile (short block)  LOOK-AHEAD
-      f_e = 0;
-      dt_1 = sqrt(l / A) * sqrt(2/alpha);
-      dt_2 = (1-alpha) * dt_1;
-      dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
-      dt_m = 0;
-      lm = 0;
-      dt_2 += dq;
-      f_m = 2 * l / (dt_1 + dt_2);
-      if (dt_1 ==0){ a = 0;}
-      else{a = (f_m - f_s)/dt_1;}
-
-      if (dt_2 - dq == 0) d=0;
-      else{ d = (f_e - f_m) / dt_2;}
-      
-    }
   }
+  
+  // if (dt_m > 0) { // trapezoidal profile LOOK-AHEAD
+  //   dt = quantize(dt_1 + dt_m + dt_2, machine_tq(b->machine), &dq);
+  //   dt_m += dq; 
+  //   f_m = ((2 * l) - (f_s * dt_1) - (f_e * dt_2)) / (dt_1 + dt_2 + 2 * dt_m);
+  //   dt_1 += dq;
+  //   dt_2 += dq;
+  //   a = (f_m - f_s)/dt_1;
+  //   d = (f_e - f_m)/dt_2;
+  // }
+  // else { // triangular profile (short block)  LOOK-AHEAD
+  //   f_e = 0;
+  //   dt_1 = sqrt(l1 / A); 
+  //   l2 = l - l1;
+  //   dt_2 = (1/A) * (- f_s) 
+  //   dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
+  //   dt_m = 0;
+  //   lm = 0;
+  //   dt_2 += dq;
+  //   f_m = 2 * l / (dt_1 + dt_2);
+  //   if (dt_1 ==0){ a = 0;}
+  //   else{a = (f_m - f_s)/dt_1;}
+
+  //   if (dt_2 - dq == 0) d=0;
+  //   else{ d = (f_e - f_m) / dt_2;}
+    
+  // }
+  // }
 
   // a = MIN( a , A);
   // d = MAX( d , -A);
@@ -679,50 +709,6 @@ int main() {
 //   return rv;
 // }
 
-static void block_velocity(block_t *b){
-  assert(b);
-  data_t A;
-  data_t f_s,f_m, f_e , l;
-  data_t alpha;
-
-  A = b->acc;
-  l = b->length;
-
-  if(!(b->prev)) {
-    f_s = 0.0;
-  }else{
-    f_s = b->prev->prof->fe;
-  }
-
-  f_m = b->act_feedrate / 60.0;
-  
-  
-  if(!(b->next)){
-    alpha = 0;
-    f_e = 0;
-  }else{
-    alpha = block_alpha(b);
-    f_e = (f_m + b->next->act_feedrate/60)/2 * alpha;
-  }
-
-  b->prof->f = f_m;
-  b->prof->fe = f_e;
-  b->prof->fs = f_s;
-  b->prof->l = l;
-  b->prof->alpha = alpha;
-
-}
 
 
 
-static void block_forward(block_t *b){
-  assert(b);
-
-  data_t v_i , v_m , v_f;
-
-  v_i = b->prof->fs;
-  v_m = b->prof->f;
-  v_f = b->prof.fe;
-
-
-}
