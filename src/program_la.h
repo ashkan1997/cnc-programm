@@ -79,7 +79,7 @@ block_t *program_last(const program_t *p);
 // for example:
 int program_parse_partial(program_t *p, machine_t *cfg) ;
 
-int program_parse(program_t *program);
+int program_parse(program_t *p);
 // int program_look_ahead(program_t *p);
 
 #endif // end double inclusion guard

@@ -147,39 +147,54 @@ void program_reset(program_t *p) {
   p->current = NULL;
 }
 
+int program_parse(program_t *p){
+  assert(p);
+  program_reset(p);
+  block_t *b = program_next(p);
+  
+
+  while (b != NULL){
+    
+    if(block_parse(b)){
+      fprintf(stderr, "ERROR: parsing the block\n");
+      return EXIT_FAILURE;}
+    b = program_next(p);
+  }
+}
+
 //_                    _ 
 //  | |    ___   ___ | | __      __ _| |__   ___  __ _  __| |
 //  | |   / _ \ / _ \| |/ /____ / _` | '_ \ / _ \/ _` |/ _` |
 //  | |__| (_) | (_) |   <_____| (_| | | | |  __/ (_| | (_| |
 //  |_____\___/ \___/|_|\_\     \__,_|_| |_|\___|\__,_|\__,_|
 
-int program_parse_st1(program_t *p){
-  assert(p);
-  block_t *b;
-  program_reset(p);
-  do{
-    b = program_next(p);
-    if (!b) break;
-    if (block_velocity(b)) {
-      fprintf(stderr, "ERROR: parsing the block\n");
-      return EXIT_FAILURE;}
-    }while(p->current != NULL);
+// int program_parse_st1(program_t *p){
+//   assert(p);
+//   block_t *b;
+//   program_reset(p);
+//   do{
+//     b = program_next(p);
+//     if (!b) break;
+//     if (block_velocity(b)) {
+//       fprintf(stderr, "ERROR: parsing the block\n");
+//       return EXIT_FAILURE;}
+//     }while(p->current != NULL);
   
-}
+// }
 
-int program_parse_st2(program_t *p){
-  assert(p);
-  block_t *b;
-  program_reset(p);
-  do{
-    b = program_next(p);
-    if (!b) break;
-    if (block_acc(b)) {
-      fprintf(stderr, "ERROR: parsing the block\n");
-      return EXIT_FAILURE;}
-    }while(p->current != NULL);
+// int program_parse_st2(program_t *p){
+//   assert(p);
+//   block_t *b;
+//   program_reset(p);
+//   do{
+//     b = program_next(p);
+//     if (!b) break;
+//     if (block_acc(b)) {
+//       fprintf(stderr, "ERROR: parsing the block\n");
+//       return EXIT_FAILURE;}
+//     }while(p->current != NULL);
   
-}
+// }
 
 
 

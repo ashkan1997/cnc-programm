@@ -48,10 +48,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.26.2/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.26.3/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.26.2/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.26.3/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = "/Users/ashkan/Desktop/university/2021-22/precision engineeri
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/cpack --config ./CPackConfig.cmake
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/cpack --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
@@ -78,7 +78,7 @@ package/fast: package
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/cpack --config ./CPackSourceConfig.cmake /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/build/CPackSourceConfig.cmake
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/cpack --config ./CPackSourceConfig.cmake /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/build/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -88,7 +88,7 @@ package_source/fast: package_source
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -98,7 +98,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -117,37 +117,37 @@ list_install_components/fast: list_install_components
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/cmake -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/cmake -P cmake_install.cmake
 .PHONY : install
 
 # Special rule for the target install
 install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/cmake -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local
 
 # Special rule for the target install/local
 install/local/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip
 
 # Special rule for the target install/strip
 install/strip/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/opt/homebrew/Cellar/cmake/3.26.2/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/opt/homebrew/Cellar/cmake/3.26.3/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
 # The main all target
@@ -258,30 +258,6 @@ scp: cmake_check_build_system
 scp/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/scp.dir/build.make CMakeFiles/scp.dir/build
 .PHONY : scp/fast
-
-src/ashkan_test.o: src/ashkan_test.c.o
-.PHONY : src/ashkan_test.o
-
-# target to build an object file
-src/ashkan_test.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/C-CNC_shared.dir/build.make CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o
-.PHONY : src/ashkan_test.c.o
-
-src/ashkan_test.i: src/ashkan_test.c.i
-.PHONY : src/ashkan_test.i
-
-# target to preprocess a source file
-src/ashkan_test.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/C-CNC_shared.dir/build.make CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.i
-.PHONY : src/ashkan_test.c.i
-
-src/ashkan_test.s: src/ashkan_test.c.s
-.PHONY : src/ashkan_test.s
-
-# target to generate assembly for a file
-src/ashkan_test.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/C-CNC_shared.dir/build.make CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.s
-.PHONY : src/ashkan_test.c.s
 
 src/bock_la.o: src/bock_la.c.o
 .PHONY : src/bock_la.o
@@ -567,9 +543,6 @@ help:
 	@echo "... ini_test"
 	@echo "... mqtt_stress"
 	@echo "... mqtt_test"
-	@echo "... src/ashkan_test.o"
-	@echo "... src/ashkan_test.i"
-	@echo "... src/ashkan_test.s"
 	@echo "... src/bock_la.o"
 	@echo "... src/bock_la.i"
 	@echo "... src/bock_la.s"

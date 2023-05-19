@@ -7,15 +7,15 @@ C_DEFINES = -DC_CNC_shared_EXPORTS
 
 C_INCLUDES = -I/usr/local/include -I/opt/homebrew/include
 
-C_FLAGSarm64 = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fPIC -D_GNU_SOURCE -Wno-backslash-newline-escape -Wall -Wno-comment
+C_FLAGSarm64 = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fPIC -fPIC -D_GNU_SOURCE -Wno-backslash-newline-escape -Wall -Wno-comment
 
-C_FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fPIC -D_GNU_SOURCE -Wno-backslash-newline-escape -Wall -Wno-comment
+C_FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fPIC -fPIC -D_GNU_SOURCE -Wno-backslash-newline-escape -Wall -Wno-comment
 
 CXX_DEFINES = -DC_CNC_shared_EXPORTS
 
 CXX_INCLUDES = -I/usr/local/include -I/opt/homebrew/include
 
-CXX_FLAGSarm64 = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fPIC -D_GNU_SOURCE -Wno-backslash-newline-escape -Wall -Wno-comment
+CXX_FLAGSarm64 = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fPIC -fPIC -D_GNU_SOURCE -Wno-backslash-newline-escape -Wall -Wno-comment
 
-CXX_FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fPIC -fPIC -D_GNU_SOURCE -Wno-backslash-newline-escape -Wall -Wno-comment
+CXX_FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fPIC -fPIC -D_GNU_SOURCE -Wno-backslash-newline-escape -Wall -Wno-comment
 

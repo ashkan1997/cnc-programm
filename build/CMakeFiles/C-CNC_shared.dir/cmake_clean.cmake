@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o"
-  "CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o.d"
   "CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o"
   "CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o.d"
   "CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o"

@@ -53,7 +53,7 @@ static void block_compute(block_t *b);
 static int block_arc(block_t *b);
 static data_t quantize(data_t t, data_t tq, data_t *dq);
 static data_t block_alpha(block_t *b);
-static void block_velocity(block_t *b);
+// static void block_velocity(block_t *b);
 
 //   _____                 _   _
 //  |  ___|   _ _ __   ___| |_(_) ___  _ __  ___
@@ -321,7 +321,9 @@ static data_t quantize(data_t t, data_t tq, data_t *dq) {
 
 static data_t block_alpha(block_t *b){
   data_t cos_alpha;
-  data_t ax, bx, ay , by , dot_prod;
+  data_t v12_x, v12_y , v12_z;
+  data_t v23_x, v23_y , v23_z;
+  data_t dotProduct , magnitudeV12 , magnitudeV23;
   
   // if (!b->prev){
   //   ax = point_x(b->target); 
@@ -334,13 +336,26 @@ static data_t block_alpha(block_t *b){
   //   bx = point_x(b->next->target) - point_x(b->target);
   //   by = point_y(b->next->target) - point_y(b->target);
 // }
-  ax = point_x(b->delta);
-  ay = point_y(b->delta);
-  bx = point_x(b->next->delta);
-  by = point_y(b->next->delta);
+  v12_x = point_x(b->delta);
+  v12_y = point_y(b->delta);
+  v12_z = point_z(b->delta);
   
-  dot_prod = (ax*bx) + (ay*by);
-  cos_alpha = (dot_prod)/(b->length * b->next->length);
+  v23_x = point_x(b->next->delta);
+  v23_y = point_y(b->next->delta);
+  v23_z = point_z(b->next->delta);
+  
+  // dot_prod = (ax*bx) + (ay*by);
+  // cos_alpha = (dot_prod)/(b->length * b->next->length);
+
+  magnitudeV12 = sqrt(v12_x * v12_x + v12_y * v12_y + v12_z * v12_z);
+  magnitudeV23 = sqrt(v23_x * v23_x + v23_y * v23_y + v23_z * v23_z);
+
+  // Calculate dot product
+  dotProduct = v12_x * v23_x + v12_y * v23_y + v12_z * v23_z;
+
+  // Calculate cosine of the angle
+  cos_alpha = dotProduct / (magnitudeV12 * magnitudeV23);
+
   return cos_alpha;
 }
 // Calcultare the velocity profile
@@ -350,7 +365,8 @@ static void block_compute(block_t *b) {
   data_t dt, dt_1, dt_2, dt_m, dq;
   data_t f_s,f_m, f_e , l;
   data_t alpha;
-  data_t l1, l2 ,lm;
+  // data_t l1, l2;
+  // data_t lm;
 
   A = b->acc;
   l = b->length;
@@ -369,40 +385,22 @@ static void block_compute(block_t *b) {
     f_e = 0;
   }else{
     alpha = block_alpha(b);
-    f_e = (f_m + b->next->act_feedrate/60)/2 * alpha;
+    if(f_m != 0){
+      f_e = (f_m + b->next->act_feedrate/60)/2 * alpha;
+    }else{
+      f_e = 0;
+    }
   }
 
-  // f_e , f_s and f_m is calculated
-
-  // if (alpha <= 0.5){
-  //   f_e = 0;
-  //   dt_1 = (f_m - f_s) / A;
-  //   dt_2 = fabs(f_e - f_m) / A;
-  //   dt_m = l /f_m - (dt_1 + dt_2) / 2.0;
-  //   if (dt_m > 0) { // trapezoidal profile
-  //     dt = quantize(dt_1 + dt_m + dt_2, machine_tq(b->machine), &dq);
-  //     dt_m += dq; 
-  //     f_m = (2 * l) / (dt_1 + dt_2 + 2 * dt_m);
-  //   }
-  //   else { // triangular profile (short block)
-  //     dt_1 = sqrt(l / A);
-  //     dt_2 = dt_1;
-  //     dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
-  //     dt_m = 0;
-  //     dt_2 += dq;
-  //     f_m = 2 * l / (dt_1 + dt_2);
-  //   }
-  //   a = (f_m - f_s) / dt_1;
-  //   d = (f_e - f_m) / dt_2;
-
-  // }else{    //LOOK-AHEAD
-
-  // double L1 = (pow(f_m, 2) - pow(f_s, 2)) / (2 * A);
   dt_1 = (f_m - f_s) / A;
   dt_2 = (f_m - f_e) / A;
-  dt_m = (l/f_m) - (fabs(dt_1) * (f_m + f_s)/(2*f_m)) - (fabs(dt_2) * (f_e + f_m)/(2*f_m));
+  if (f_m ==0){
+    dt_m = 0;
+  }else{
+    dt_m = (l/f_m) - (fabs(dt_1) * (f_m + f_s)/(2*f_m)) - (fabs(dt_2) * (f_e + f_m)/(2*f_m));
+  }
   
-  if (dt_m > 0 {
+  if (dt_m > 0) {
     dt = quantize(fabs(dt_1) + dt_m + fabs(dt_2), machine_tq(b->machine), &dq);
     dt_m += dq;
     f_m = ((2 * l) - (f_s * fabs(dt_1)) - (f_e * fabs(dt_2))) / fabs(dt_1 + dt_2 + 2 * dt_m);
@@ -425,7 +423,7 @@ static void block_compute(block_t *b) {
     }
 
   }else{   // short segmentation
-    dt_1 = sqrt(L/A);
+    dt_1 = sqrt(l/A);
     dt_2 = dt_1;
     dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
       dt_m = 0;
@@ -437,40 +435,6 @@ static void block_compute(block_t *b) {
 
   }
   
-  // if (dt_m > 0) { // trapezoidal profile LOOK-AHEAD
-  //   dt = quantize(dt_1 + dt_m + dt_2, machine_tq(b->machine), &dq);
-  //   dt_m += dq; 
-  //   f_m = ((2 * l) - (f_s * dt_1) - (f_e * dt_2)) / (dt_1 + dt_2 + 2 * dt_m);
-  //   dt_1 += dq;
-  //   dt_2 += dq;
-  //   a = (f_m - f_s)/dt_1;
-  //   d = (f_e - f_m)/dt_2;
-  // }
-  // else { // triangular profile (short block)  LOOK-AHEAD
-  //   f_e = 0;
-  //   dt_1 = sqrt(l1 / A); 
-  //   l2 = l - l1;
-  //   dt_2 = (1/A) * (- f_s) 
-  //   dt = quantize(dt_1 + dt_2, machine_tq(b->machine), &dq);
-  //   dt_m = 0;
-  //   lm = 0;
-  //   dt_2 += dq;
-  //   f_m = 2 * l / (dt_1 + dt_2);
-  //   if (dt_1 ==0){ a = 0;}
-  //   else{a = (f_m - f_s)/dt_1;}
-
-  //   if (dt_2 - dq == 0) d=0;
-  //   else{ d = (f_e - f_m) / dt_2;}
-    
-  // }
-  // }
-
-  // a = MIN( a , A);
-  // d = MAX( d , -A);
-  
-
-  // if (a < 0) a= MIN(a , -100);
-  // if (d > 0) d= MAX( d , 100);
   // set calculated values in block object
   b->prof->dt_1 = dt_1;
   b->prof->dt_2 = dt_2;
@@ -484,6 +448,78 @@ static void block_compute(block_t *b) {
   b->prof->fs = f_s;
 }
 
+
+static void block_compute_new(block_t *b){
+  assert(b);
+  data_t f_s , f_m , f_e;
+  data_t A , l;
+  data_t a , d;
+  data_t s , s1 , s2 , sf;
+  data_t alpha;
+
+
+  A = b->acc;
+  l = b->length;
+
+  if(!(b->prev)) {
+    f_s = 0.0;
+  }else{
+    f_s = b->prev->prof->fs;
+  }
+
+  f_m = b->act_feedrate / 60.0;
+  
+  
+  if(!(b->next)){
+    alpha = 0;
+    f_e = 0;
+  }else{
+    alpha = block_alpha(b);
+    if(f_m != 0){
+      f_e = (f_m + b->next->act_feedrate/60)/2 * alpha;
+    }else{
+      f_e = 0;
+    }
+  }
+
+
+}
+
+static void block_velocity(block_t *b){
+  assert(b);
+  data_t f_s , f_m , f_e;
+  data_t alpha;
+
+
+  A = b->acc;
+  l = b->length;
+
+  if(!(b->prev)) {
+    f_s = 0.0;
+  }else{
+    f_s = b->prev->prof->fs;
+  }
+
+  f_m = b->act_feedrate / 60.0;
+  
+  
+  if(!(b->next)){
+    alpha = 0;
+    f_e = 0;
+  }else{
+    alpha = block_alpha(b);
+    if(f_m != 0){
+      f_e = (f_m + b->next->act_feedrate/60)/2 * alpha;
+    }else{
+      f_e = 0;
+    }
+  }
+
+  b->prof->fs = f_s;
+  b->prof->fe = f_e;
+  b->prof->f = f_m;
+  b->prof->alpha = alpha;
+}
 // Calculate the arc coordinates
 static int block_arc(block_t *b) {
   data_t x0, y0, z0, xc, yc, xf, yf, zf, r;
@@ -645,7 +681,6 @@ int main() {
 //   char *word, *line, *tofree;
 //   point_t *p0;
 //   int rv = 0;
-
 //   tofree = line = strdup(b->line);
 //   if (!line) {
 //     perror("Could not allocate momory for tokenizing line");

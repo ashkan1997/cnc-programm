@@ -1,0 +1,5 @@
+/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/products_host/bin/ini_test
+/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/products_host/bin/mqtt_test
+/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/products_host/bin/mqtt_stress
+/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/products_host/bin/c-cnc
+/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/products_host/lib/libC-CNC_shared.dylib

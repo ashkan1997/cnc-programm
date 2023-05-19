@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.26.2/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.26.3/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.26.2/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.26.3/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -69,24 +69,10 @@ include CMakeFiles/C-CNC_shared.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/C-CNC_shared.dir/flags.make
 
-CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o: CMakeFiles/C-CNC_shared.dir/flags.make
-CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o: /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/src/ashkan_test.c
-CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o: CMakeFiles/C-CNC_shared.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o -MF CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o.d -o CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o -c "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/ashkan_test.c"
-
-CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.i"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/ashkan_test.c" > CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.i
-
-CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.s"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/ashkan_test.c" -o CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.s
-
 CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o: CMakeFiles/C-CNC_shared.dir/flags.make
 CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o: /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/src/bock_la.c
 CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o: CMakeFiles/C-CNC_shared.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o"
 	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o -MF CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o.d -o CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o -c "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/bock_la.c"
 
 CMakeFiles/C-CNC_shared.dir/src/bock_la.c.i: cmake_force
@@ -100,7 +86,7 @@ CMakeFiles/C-CNC_shared.dir/src/bock_la.c.s: cmake_force
 CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o: CMakeFiles/C-CNC_shared.dir/flags.make
 CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o: /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/src/fsm_la.c
 CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o: CMakeFiles/C-CNC_shared.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o"
 	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o -MF CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o.d -o CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o -c "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/fsm_la.c"
 
 CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.i: cmake_force
@@ -114,7 +100,7 @@ CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.s: cmake_force
 CMakeFiles/C-CNC_shared.dir/src/machine.c.o: CMakeFiles/C-CNC_shared.dir/flags.make
 CMakeFiles/C-CNC_shared.dir/src/machine.c.o: /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/src/machine.c
 CMakeFiles/C-CNC_shared.dir/src/machine.c.o: CMakeFiles/C-CNC_shared.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/C-CNC_shared.dir/src/machine.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/C-CNC_shared.dir/src/machine.c.o"
 	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/C-CNC_shared.dir/src/machine.c.o -MF CMakeFiles/C-CNC_shared.dir/src/machine.c.o.d -o CMakeFiles/C-CNC_shared.dir/src/machine.c.o -c "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/machine.c"
 
 CMakeFiles/C-CNC_shared.dir/src/machine.c.i: cmake_force
@@ -128,7 +114,7 @@ CMakeFiles/C-CNC_shared.dir/src/machine.c.s: cmake_force
 CMakeFiles/C-CNC_shared.dir/src/point.c.o: CMakeFiles/C-CNC_shared.dir/flags.make
 CMakeFiles/C-CNC_shared.dir/src/point.c.o: /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/src/point.c
 CMakeFiles/C-CNC_shared.dir/src/point.c.o: CMakeFiles/C-CNC_shared.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/C-CNC_shared.dir/src/point.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/C-CNC_shared.dir/src/point.c.o"
 	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/C-CNC_shared.dir/src/point.c.o -MF CMakeFiles/C-CNC_shared.dir/src/point.c.o.d -o CMakeFiles/C-CNC_shared.dir/src/point.c.o -c "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/point.c"
 
 CMakeFiles/C-CNC_shared.dir/src/point.c.i: cmake_force
@@ -142,7 +128,7 @@ CMakeFiles/C-CNC_shared.dir/src/point.c.s: cmake_force
 CMakeFiles/C-CNC_shared.dir/src/program_la.c.o: CMakeFiles/C-CNC_shared.dir/flags.make
 CMakeFiles/C-CNC_shared.dir/src/program_la.c.o: /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/src/program_la.c
 CMakeFiles/C-CNC_shared.dir/src/program_la.c.o: CMakeFiles/C-CNC_shared.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/C-CNC_shared.dir/src/program_la.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/C-CNC_shared.dir/src/program_la.c.o"
 	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/C-CNC_shared.dir/src/program_la.c.o -MF CMakeFiles/C-CNC_shared.dir/src/program_la.c.o.d -o CMakeFiles/C-CNC_shared.dir/src/program_la.c.o -c "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/program_la.c"
 
 CMakeFiles/C-CNC_shared.dir/src/program_la.c.i: cmake_force
@@ -156,7 +142,7 @@ CMakeFiles/C-CNC_shared.dir/src/program_la.c.s: cmake_force
 CMakeFiles/C-CNC_shared.dir/src/utils.c.o: CMakeFiles/C-CNC_shared.dir/flags.make
 CMakeFiles/C-CNC_shared.dir/src/utils.c.o: /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/src/utils.c
 CMakeFiles/C-CNC_shared.dir/src/utils.c.o: CMakeFiles/C-CNC_shared.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/C-CNC_shared.dir/src/utils.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/C-CNC_shared.dir/src/utils.c.o"
 	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/C-CNC_shared.dir/src/utils.c.o -MF CMakeFiles/C-CNC_shared.dir/src/utils.c.o.d -o CMakeFiles/C-CNC_shared.dir/src/utils.c.o -c "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/utils.c"
 
 CMakeFiles/C-CNC_shared.dir/src/utils.c.i: cmake_force
@@ -170,7 +156,7 @@ CMakeFiles/C-CNC_shared.dir/src/utils.c.s: cmake_force
 CMakeFiles/C-CNC_shared.dir/src/inic.cpp.o: CMakeFiles/C-CNC_shared.dir/flags.make
 CMakeFiles/C-CNC_shared.dir/src/inic.cpp.o: /Users/ashkan/Desktop/university/2021-22/precision\ engineering\ /project/project\ last/cnc-programm/src/inic.cpp
 CMakeFiles/C-CNC_shared.dir/src/inic.cpp.o: CMakeFiles/C-CNC_shared.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/C-CNC_shared.dir/src/inic.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/C-CNC_shared.dir/src/inic.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/C-CNC_shared.dir/src/inic.cpp.o -MF CMakeFiles/C-CNC_shared.dir/src/inic.cpp.o.d -o CMakeFiles/C-CNC_shared.dir/src/inic.cpp.o -c "/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/src/inic.cpp"
 
 CMakeFiles/C-CNC_shared.dir/src/inic.cpp.i: cmake_force
@@ -183,7 +169,6 @@ CMakeFiles/C-CNC_shared.dir/src/inic.cpp.s: cmake_force
 
 # Object files for target C-CNC_shared
 C__CNC_shared_OBJECTS = \
-"CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o" \
 "CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o" \
 "CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o" \
 "CMakeFiles/C-CNC_shared.dir/src/machine.c.o" \
@@ -195,7 +180,6 @@ C__CNC_shared_OBJECTS = \
 # External object files for target C-CNC_shared
 C__CNC_shared_EXTERNAL_OBJECTS =
 
-libC-CNC_shared.dylib: CMakeFiles/C-CNC_shared.dir/src/ashkan_test.c.o
 libC-CNC_shared.dylib: CMakeFiles/C-CNC_shared.dir/src/bock_la.c.o
 libC-CNC_shared.dylib: CMakeFiles/C-CNC_shared.dir/src/fsm_la.c.o
 libC-CNC_shared.dylib: CMakeFiles/C-CNC_shared.dir/src/machine.c.o
@@ -205,7 +189,7 @@ libC-CNC_shared.dylib: CMakeFiles/C-CNC_shared.dir/src/utils.c.o
 libC-CNC_shared.dylib: CMakeFiles/C-CNC_shared.dir/src/inic.cpp.o
 libC-CNC_shared.dylib: CMakeFiles/C-CNC_shared.dir/build.make
 libC-CNC_shared.dylib: CMakeFiles/C-CNC_shared.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX shared library libC-CNC_shared.dylib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/ashkan/Desktop/university/2021-22/precision engineering /project/project last/cnc-programm/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX shared library libC-CNC_shared.dylib"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/C-CNC_shared.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
