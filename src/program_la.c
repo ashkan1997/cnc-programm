@@ -155,10 +155,40 @@ int program_parse(program_t *p){
 
   while (b != NULL){
     
-    if(block_parse(b)){
+    if(block_velocity(b)){
       fprintf(stderr, "ERROR: parsing the block\n");
       return EXIT_FAILURE;}
     b = program_next(p);
+
+
+  }
+
+}
+
+
+void program_velocity(program_t *p){
+  assert(p);
+  program_reset(p);
+  block_t *b = program_next(p);
+
+  while (b!= NULL){
+
+    if(block_velocity(b)){
+      fprintf(stderr , "ERROR: parsing the block\n");
+      return EXIT_FAILURE;
+    }
+    b = program_next(p);
+  }
+}
+
+void program_acc(program_t *p){
+  assert(p);
+  program_reset(p);
+  block_t *b = program_next(p);
+
+  while( b!= NULL){
+
+    if(block_acc)
   }
 }
 

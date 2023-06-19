@@ -212,9 +212,11 @@ int block_parse_partial(block_t *b) {
 
 int block_parse(block_t *b) {
   assert(b);
-  block_compute(b);
+  block_velocity(b);
+  block_acc(b);
   return 0;
 }
+
 
 
 
@@ -449,43 +451,43 @@ static void block_compute(block_t *b) {
 }
 
 
-static void block_compute_new(block_t *b){
-  assert(b);
-  data_t f_s , f_m , f_e;
-  data_t A , l;
-  data_t a , d;
-  data_t s , s1 , s2 , sf;
-  data_t alpha;
+// static void block_compute_new(block_t *b){
+//   assert(b);
+//   data_t f_s , f_m , f_e;
+//   data_t A , l;
+//   data_t a , d;
+//   data_t s , s1 , s2 , sf;
+//   data_t alpha;
+// 
+// 
+//   A = b->acc;
+//   l = b->length;
+// 
+//   if(!(b->prev)) {
+//     f_s = 0.0;
+//   }else{
+//     f_s = b->prev->prof->fs;
+//   }
+// 
+//   f_m = b->act_feedrate / 60.0;
+  // 
+  // 
+//   if(!(b->next)){
+//     alpha = 0;
+//     f_e = 0;
+//   }else{
+//     alpha = block_alpha(b);
+//     if(f_m != 0){
+//       f_e = (f_m + b->next->act_feedrate/60)/2 * alpha;
+//     }else{
+//       f_e = 0;
+//     }
+//   }
+// 
+// 
+// }
 
-
-  A = b->acc;
-  l = b->length;
-
-  if(!(b->prev)) {
-    f_s = 0.0;
-  }else{
-    f_s = b->prev->prof->fs;
-  }
-
-  f_m = b->act_feedrate / 60.0;
-  
-  
-  if(!(b->next)){
-    alpha = 0;
-    f_e = 0;
-  }else{
-    alpha = block_alpha(b);
-    if(f_m != 0){
-      f_e = (f_m + b->next->act_feedrate/60)/2 * alpha;
-    }else{
-      f_e = 0;
-    }
-  }
-
-
-}
-
-static void block_velocity(block_t *b){
+static int block_velocity(block_t *b){
   assert(b);
   data_t f_s , f_m , f_e;
   data_t alpha;
@@ -519,7 +521,58 @@ static void block_velocity(block_t *b){
   b->prof->fe = f_e;
   b->prof->f = f_m;
   b->prof->alpha = alpha;
+
 }
+
+static void block_acc(block_t *b){
+  assert(b);
+  data_t A , l , a , d , l1 , l2;
+  data_t f_s , f_e , f_m , f;
+  data_t t1 , t2 , t_m;
+
+  f_s = b->prof->fs;
+  f_e = b->prof->fe;
+  f_m = b->act_feedrate;
+  A = b->acc;
+  l = b->length;
+
+  l1 = (f_m - f_s)/(2*A);
+  l2 = (f_e - f_m)/(2*A);
+  
+  if (l-abs(l1)-asb(l2) > 0){   // long segmentation
+    f_m = sqrt(2*A*l1 + pow(f_s , 2));
+    
+  }else{ // short segmentation 
+    f_m = sqrt((2 * A * l) + (pow(f_s,2) + pow(f_e,2)) / 2)
+    l1 = (f_m - f_s)/(2*A);
+    l2 = (f_e - f_m)/(2*A);
+  }
+
+  a = (f_m - f_s)/(2*abs(l1));
+  d = (f_e - f_m)/(2*abs(l2));
+
+  t1 = abs((f_m - f_s)/(a));
+  
+  
+  b->prof->a = a;
+  b->prof->d = d;
+  b->prof->f = f_m;
+}
+static void block_time(block_t *b){
+  assert(b);
+  data_t A , l , a , d , l1 , l2;
+  data_t f_s , f_e , f_m , f;
+  data_t t1 , t2 , t_m;
+
+  a = b->prof->a;
+  d = b->prof->d;
+
+
+  if (a > 0){
+
+  }
+}
+
 // Calculate the arc coordinates
 static int block_arc(block_t *b) {
   data_t x0, y0, z0, xc, yc, xf, yf, zf, r;
